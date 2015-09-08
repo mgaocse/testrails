@@ -42,11 +42,12 @@ namespace :deploy do
     desc 'Manage Unicorn'
     task command do
       on roles(:app), in: :sequence, wait: 1 do
-        execute "/etc/init.d/unicorn_#{fetch(:application)} #{command}'
+        execute "/etc/init.d/unicorn_#{fetch(:application)} #{command}"
       end
     end
   end
 
+  after :publishing, :restart
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
